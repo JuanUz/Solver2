@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Service Worker setup (mantenido)
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW error', err));
@@ -11,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const stepsContainer = document.getElementById('steps-container');
     const solutionOutput = document.getElementById('solution-output');
     
-    // Elementos del chat
     const btnSendChat = document.getElementById('btn-send-chat');
     const chatInput = document.getElementById('chat-input');
     const chatHistory = document.getElementById('chat-history');
@@ -27,13 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // --- SIMULACIÓN DE CONEXIÓN AL BACKEND ---
-        // Aquí es donde harías un fetch() a tu API en Python con SymPy.
-        // Para que pruebes la UI, simularemos la respuesta analítica del clásico problema Exacto.
-        
+        // Simulación del procedimiento de una EDO Exacta
         let stepsHtml = '';
         let finalSolution = '';
-        let tipoEcuacion = 'Exacta'; // Simulado
+        let tipoEcuacion = 'Exacta';
 
         stepsHtml += `<div class="result-box" style="margin-bottom: 25px;">
             <h3 style="margin-bottom: 15px; color: var(--primary);">Paso 1: Criterio de Exactitud</h3>
@@ -79,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         finalSolution = `x²y - y = C`;
 
-        // Renderizar resultados en pantalla
         stepsContainer.innerHTML = stepsHtml;
         
         solutionOutput.innerHTML = `<div class="result-box" style="border-left: 4px solid #ff007f;">
@@ -91,7 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         resultsSection.classList.remove('hidden');
 
-        // Configurar el prompt del sistema para Gemini adaptado a EDOs
         const systemPrompt = `Eres "HamsterSolver", un tutor experto en Ciencias Básicas y Ecuaciones Diferenciales. 
         El usuario acaba de resolver la ecuación ${mEq} dx + ${nEq} dy = 0.
         Se determinó que es una Ecuación ${tipoEcuacion} y la solución general obtenida es ${finalSolution}.
@@ -101,7 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
         chatHistory.innerHTML = '<div class="chat-msg msg-bot">¡Procedimiento analítico completado! ¿Tienes dudas sobre cómo se resolvió la integral o las derivadas parciales? 🐹</div>';
     });
 
-    // Lógica del Chat (Mantenida intacta)
     async function sendMessage() {
         const text = chatInput.value.trim();
         if(!text) return;
