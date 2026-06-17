@@ -1,20 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Configuración del Service Worker para PWA
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW error', err));
         });
     }
 
+    // 2. Referencias al DOM
     const btnSolve = document.getElementById('btn-solve');
     const resultsSection = document.getElementById('results-section');
     const stepsContainer = document.getElementById('steps-container');
     const solutionOutput = document.getElementById('solution-output');
     
+    // Referencias al chat
     const btnSendChat = document.getElementById('btn-send-chat');
     const chatInput = document.getElementById('chat-input');
     const chatHistory = document.getElementById('chat-history');
     let chatMessages = [];
 
+    // 3. Lógica Principal: Enviar ecuación a Vercel/Python
     btnSolve.addEventListener('click', async () => {
         const mEq = document.getElementById('m-eq').value.trim();
         const nEq = document.getElementById('n-eq').value.trim();
@@ -25,75 +29,101 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Simulación del procedimiento de una EDO Exacta
-        let stepsHtml = '';
-        let finalSolution = '';
-        let tipoEcuacion = 'Exacta';
+        // Bloquear botón y mostrar estado de carga
+        btnSolve.textContent = "Calculando...";
+        btnSolve.disabled = true;
 
-        stepsHtml += `<div class="result-box" style="margin-bottom: 25px;">
-            <h3 style="margin-bottom: 15px; color: var(--primary);">Paso 1: Criterio de Exactitud</h3>
-            <ul style="list-style-type: none; padding-left: 0; font-family: monospace; font-size: 0.95rem;">
-                <li style="margin-bottom: 8px; background: #0a0b0d; padding: 10px; border-radius: 6px; border: 1px solid #333;">
-                    <span style="color: var(--text-main);">Derivada parcial de M respecto a y:</span> <br>
-                    <span style="color: #4ceabf;">&part;M/&part;y = &part;(${mEq})/&part;y = 2x</span>
-                </li>
-                <li style="margin-bottom: 8px; background: #0a0b0d; padding: 10px; border-radius: 6px; border: 1px solid #333;">
-                    <span style="color: var(--text-main);">Derivada parcial de N respecto a x:</span> <br>
-                    <span style="color: #4ceabf;">&part;N/&part;x = &part;(${nEq})/&part;x = 2x</span>
-                </li>
-            </ul>
-            <p style="color: #4ceabf; margin-top: 15px; font-weight: 600;">✅ Como &part;M/&part;y = &part;N/&part;x, la ecuación es EXACTA.</p>
-        </div>`;
+        try {
+            // Petición POST al Serverless Function (api/solve.py)
+            const response = await fetch('/api/solve', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ m: mEq, n: nEq, method: method })
+            });
+            
+            const data = await response.json();
 
-        stepsHtml += `<div class="result-box" style="margin-bottom: 25px;">
-            <h3 style="margin-bottom: 15px; color: var(--primary);">Paso 2: Integración de M(x,y)</h3>
-            <ul style="list-style-type: none; padding-left: 0; font-family: monospace; font-size: 1rem;">
-                <li style="margin-bottom: 8px; background: #0a0b0d; padding: 12px; border-radius: 6px; border: 1px solid #333;">
-                    f(x,y) = &int; M(x,y) dx + g(y)<br>
-                    f(x,y) = &int; (${mEq}) dx + g(y)<br>
-                    <strong style="color: var(--text-main);">f(x,y) = x²y + g(y)</strong>
-                </li>
-            </ul>
-        </div>`;
+            // Manejo de Errores de Sintaxis o de Servidor
+            if (data.status === "error") {
+                alert("⛔ Error Matemático: " + data.mensaje + "\nRevisa la sintaxis (ej. usa 2*x en lugar de 2x).");
+                btnSolve.textContent = "Resolver Ecuación";
+                btnSolve.disabled = false;
+                return;
+            }
 
-        stepsHtml += `<div class="result-box" style="margin-bottom: 25px;">
-            <h3 style="margin-bottom: 15px; color: var(--primary);">Paso 3: Derivación e Igualación con N(x,y)</h3>
-            <ul style="list-style-type: none; padding-left: 0; font-family: monospace; font-size: 1rem;">
-                <li style="margin-bottom: 8px; background: #0a0b0d; padding: 12px; border-radius: 6px; border: 1px solid #333;">
-                    &part;f/&part;y = x² + g'(y)<br>
-                    <span style="color: var(--text-muted);">Igualando a N(x,y):</span><br>
-                    x² + g'(y) = ${nEq}<br>
-                    g'(y) = -1
-                </li>
-                <li style="margin-bottom: 8px; background: #0a0b0d; padding: 12px; border-radius: 6px; border: 1px solid #333;">
-                    <span style="color: var(--text-muted);">Integrando g'(y):</span><br>
-                    g(y) = &int; -1 dy = -y
-                </li>
-            </ul>
-        </div>`;
+            // Fallback si la ecuación no pasa la prueba de exactitud
+            if (data.status === "not_exact") {
+                alert(`⚠️ La ecuación NO es exacta (∂M/∂y = ${data.dM_dy} ≠ ∂N/∂x = ${data.dN_dx}).\n${data.mensaje}`);
+                btnSolve.textContent = "Resolver Ecuación";
+                btnSolve.disabled = false;
+                return;
+            }
 
-        finalSolution = `x²y - y = C`;
+            // 4. Renderizado Dinámico de los pasos devueltos por SymPy
+            let stepsHtml = '';
+            
+            stepsHtml += `<div class="result-box" style="margin-bottom: 25px;">
+                <h3 style="margin-bottom: 15px; color: var(--primary);">Paso 1: Criterio de Exactitud</h3>
+                <ul style="list-style-type: none; padding-left: 0; font-family: monospace; font-size: 0.95rem;">
+                    <li style="margin-bottom: 8px; background: #0a0b0d; padding: 10px; border-radius: 6px; border: 1px solid #333;">
+                        <span style="color: var(--text-main);">∂M/∂y = </span> <span style="color: #4ceabf;">${data.dM_dy}</span>
+                    </li>
+                    <li style="margin-bottom: 8px; background: #0a0b0d; padding: 10px; border-radius: 6px; border: 1px solid #333;">
+                        <span style="color: var(--text-main);">∂N/∂x = </span> <span style="color: #4ceabf;">${data.dN_dx}</span>
+                    </li>
+                </ul>
+                <p style="color: #4ceabf; margin-top: 15px; font-weight: 600;">✅ Coinciden. La ecuación es EXACTA.</p>
+            </div>`;
 
-        stepsContainer.innerHTML = stepsHtml;
-        
-        solutionOutput.innerHTML = `<div class="result-box" style="border-left: 4px solid #ff007f;">
-            <p><strong>Solución General Final:</strong></p>
-            <div style="background: #0a0b0d; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #333;">
-                <strong style="color: var(--primary); font-size: 1.5rem;">${finalSolution}</strong>
-            </div>
-        </div>`;
+            stepsHtml += `<div class="result-box" style="margin-bottom: 25px;">
+                <h3 style="margin-bottom: 15px; color: var(--primary);">Paso 2 y 3: Integración y Despeje</h3>
+                <ul style="list-style-type: none; padding-left: 0; font-family: monospace; font-size: 1rem;">
+                    <li style="margin-bottom: 8px; background: #0a0b0d; padding: 12px; border-radius: 6px; border: 1px solid #333;">
+                        1. Integrando M: f(x,y) = <strong style="color: var(--primary);">${data.f_partial} + g(y)</strong>
+                    </li>
+                    <li style="margin-bottom: 8px; background: #0a0b0d; padding: 12px; border-radius: 6px; border: 1px solid #333;">
+                        2. Igualando y despejando g'(y): g'(y) = <strong style="color: var(--primary);">${data.g_prime}</strong>
+                    </li>
+                    <li style="margin-bottom: 8px; background: #0a0b0d; padding: 12px; border-radius: 6px; border: 1px solid #333;">
+                        3. Integrando g'(y): g(y) = <strong style="color: var(--primary);">${data.g_y}</strong>
+                    </li>
+                </ul>
+            </div>`;
 
-        resultsSection.classList.remove('hidden');
+            // Advertencia visual si es un resultado aproximado o integral no resuelta
+            if (data.is_approximate) {
+                stepsHtml += `<div class="result-box" style="margin-bottom: 25px; border-left: 4px solid #ffa500; background: #2a1f0a;">
+                    <h3 style="margin-bottom: 10px; color: #ffa500;">⚠️ Aviso de Aproximación</h3>
+                    <p style="font-size: 0.95rem; color: #ffdd99;">El motor matemático no encontró una antiderivada elemental estándar para g'(y). El resultado mostrado contiene una integral no resuelta o una aproximación numérica implícita.</p>
+                </div>`;
+            }
 
-        const systemPrompt = `Eres "HamsterSolver", un tutor experto en Ciencias Básicas y Ecuaciones Diferenciales. 
-        El usuario acaba de resolver la ecuación ${mEq} dx + ${nEq} dy = 0.
-        Se determinó que es una Ecuación ${tipoEcuacion} y la solución general obtenida es ${finalSolution}.
-        Responde dudas teóricas sobre cálculo integral, derivadas parciales o reglas de homogeneidad asociadas a este problema.`;
+            stepsContainer.innerHTML = stepsHtml;
+            
+            // Solución Final
+            solutionOutput.innerHTML = `<div class="result-box" style="border-left: 4px solid #ff007f;">
+                <p><strong>Solución General Final:</strong></p>
+                <div style="background: #0a0b0d; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #333;">
+                    <strong style="color: var(--primary); font-size: 1.5rem;">${data.solucion}</strong>
+                </div>
+            </div>`;
 
-        chatMessages = [{ role: "system", content: systemPrompt }];
-        chatHistory.innerHTML = '<div class="chat-msg msg-bot">¡Procedimiento analítico completado! ¿Tienes dudas sobre cómo se resolvió la integral o las derivadas parciales? 🐹</div>';
+            resultsSection.classList.remove('hidden');
+
+            // 5. Actualizar el Chat de Gemini con el contexto del nuevo resultado
+            const systemPrompt = `Eres "HamsterSolver", tutor de Ciencias Básicas. El usuario resolvió la EDO Exacta con M=${mEq} y N=${nEq}. El resultado calculado es ${data.solucion}. Responde dudas teóricas breves.`;
+            chatMessages = [{ role: "system", content: systemPrompt }];
+            chatHistory.innerHTML = '<div class="chat-msg msg-bot">¡Ecuación procesada por el servidor! ¿Tienes dudas sobre el resultado o el proceso? 🐹</div>';
+
+        } catch (error) {
+            alert("⛔ Error de red: No se pudo conectar con el servidor de matemáticas en Vercel.");
+        } finally {
+            btnSolve.textContent = "Resolver Ecuación";
+            btnSolve.disabled = false;
+        }
     });
 
+    // 6. Lógica del Chat de IA
     async function sendMessage() {
         const text = chatInput.value.trim();
         if(!text) return;
