@@ -41,11 +41,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ m: mEq, n: nEq, method: method })
             });
             
+            // Si el servidor falla antes de devolver JSON, lanzará el error al catch
+            if (!response.ok) {
+                const textError = await response.text();
+                throw new Error(`Error HTTP ${response.status}: ${textError}`);
+            }
+
             const data = await response.json();
 
-            // Manejo de Errores de Sintaxis o de Servidor
+            // Manejo de Errores de Sintaxis Matemáticas devueltos por Python
             if (data.status === "error") {
-                alert("⛔ Error Matemático: " + data.mensaje + "\nRevisa la sintaxis (ej. usa 2*x en lugar de 2x).");
+                alert("⛔ Error Matemático: " + data.mensaje + "\nRevisa la sintaxis de las funciones.");
                 btnSolve.textContent = "Resolver Ecuación";
                 btnSolve.disabled = false;
                 return;
@@ -115,15 +121,10 @@ document.addEventListener('DOMContentLoaded', () => {
             chatMessages = [{ role: "system", content: systemPrompt }];
             chatHistory.innerHTML = '<div class="chat-msg msg-bot">¡Ecuación procesada por el servidor! ¿Tienes dudas sobre el resultado o el proceso? 🐹</div>';
 
-        }catch (error) {
+        } catch (error) {
             // Esto te mostrará el error real en pantalla en lugar de un mensaje genérico
             alert(`⛔ Fallo en la conexión o cálculo:\n\n${error.message}\n\nRevisa la pestaña "Logs" en tu panel de Vercel para ver el detalle del backend.`);
             console.error("Error detallado:", error);
-        } finally {
-            btnSolve.textContent = "Resolver Ecuación";
-            btnSolve.disabled = false;
-        }
-
         } finally {
             btnSolve.textContent = "Resolver Ecuación";
             btnSolve.disabled = false;
