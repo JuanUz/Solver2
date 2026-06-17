@@ -115,8 +115,15 @@ document.addEventListener('DOMContentLoaded', () => {
             chatMessages = [{ role: "system", content: systemPrompt }];
             chatHistory.innerHTML = '<div class="chat-msg msg-bot">¡Ecuación procesada por el servidor! ¿Tienes dudas sobre el resultado o el proceso? 🐹</div>';
 
-        } catch (error) {
-            alert("⛔ Error de red: No se pudo conectar con el servidor de matemáticas en Vercel.");
+        }catch (error) {
+            // Esto te mostrará el error real en pantalla en lugar de un mensaje genérico
+            alert(`⛔ Fallo en la conexión o cálculo:\n\n${error.message}\n\nRevisa la pestaña "Logs" en tu panel de Vercel para ver el detalle del backend.`);
+            console.error("Error detallado:", error);
+        } finally {
+            btnSolve.textContent = "Resolver Ecuación";
+            btnSolve.disabled = false;
+        }
+
         } finally {
             btnSolve.textContent = "Resolver Ecuación";
             btnSolve.disabled = false;
