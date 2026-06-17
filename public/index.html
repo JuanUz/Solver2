@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HamsterSolver | Gauss-Seidel</title>
+    <title>HamsterSolver | Ecuaciones Diferenciales</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,59 +11,58 @@
     <div class="container">
         <header>
             <div class="header-content">
-                <img src="logo_animado.gif" alt="Animated hamster running on a blue wheel with radiating light effect on dark background, representing the HamsterSolver application logo" class="app-logo">
+                <img src="logo_animado.gif" alt="Animated hamster logo" class="app-logo">
                 <div class="logo-container">
                     <a href="index.html">
-                        <img src="logo2.png" alt="Logo de HamsterSolver - Página de Inicio" class="sitio-logo">
+                        <img src="logo2.png" alt="Logo de HamsterSolver" class="sitio-logo">
                     </a>
                 </div>
             </div>
-            <p>Métodos Numéricos: Resolución de sistemas de ecuaciones por Gauss-Seidel.</p>
+            <p>Ciencias Básicas: Solucionador Analítico de EDOs (Exactas y Homogéneas).</p>
         </header>
 
         <main>
             <section class="card setup-section">
-                <h2>Configuración del Sistema</h2>
-                <div class="input-group">
-                    <div>
-                        <label for="matrix-size">Tamaño de la matriz (n x n):</label>
-                        <input type="number" id="matrix-size" min="2" max="10" value="3">
+                <h2>Ingresa la Ecuación Diferencial</h2>
+                <p style="color: var(--text-muted); margin-bottom: 20px; text-align: center;">Formato estándar: M(x,y) dx + N(x,y) dy = 0</p>
+                
+                <div class="equation-input-wrapper">
+                    <div class="eq-term">
+                        <label for="m-eq">M(x,y)</label>
+                        <input type="text" id="m-eq" placeholder="Ej. 2*x*y" value="2*x*y">
                     </div>
-                    <div>
-                        <label for="stop-criterion">Criterio de Parada:</label>
-                        <select id="stop-criterion" class="glass-select">
-                            <option value="error">Por Tolerancia de Error</option>
-                            <option value="iterations">Por Límite de Iteraciones</option>
+                    <span class="math-symbol">dx &nbsp;+&nbsp;</span>
+                    <div class="eq-term">
+                        <label for="n-eq">N(x,y)</label>
+                        <input type="text" id="n-eq" placeholder="Ej. x^2 - 1" value="x^2 - 1">
+                    </div>
+                    <span class="math-symbol">dy &nbsp;=&nbsp; 0</span>
+                </div>
+
+                <div class="input-group" style="justify-content: center;">
+                    <div style="flex: none; min-width: 250px;">
+                        <label for="solve-method">Preferencia de Método:</label>
+                        <select id="solve-method" class="glass-select">
+                            <option value="auto">Automático (Detectar tipo)</option>
+                            <option value="exact">Forzar Exacta</option>
+                            <option value="homogeneous">Forzar Homogénea</option>
                         </select>
                     </div>
-                    <div id="div-error-tol">
-                        <label for="error-tol">Tolerancia de error:</label>
-                        <input type="number" id="error-tol" step="0.0001" value="0.001">
-                    </div>
-                    <div id="div-max-iter" style="display: none;">
-                        <label for="max-iter">Máximas Iteraciones:</label>
-                        <input type="number" id="max-iter" value="10" min="1">
-                    </div>
                 </div>
-                <button id="btn-generate" class="btn-primary">Generar Matriz</button>
-            </section>
 
-            <section id="model-section" class="card hidden">
-                <h2>Sistema de Ecuaciones Lineales</h2>
-                <div id="matrix-container"></div>
-                <button id="btn-solve" class="btn-primary" style="margin-top: 20px;">Resolver por Gauss-Seidel</button>
+                <button id="btn-solve" class="btn-primary">Resolver Ecuación</button>
             </section>
 
             <section id="results-section" class="card hidden">
-                <h2>Resultados y Procedimiento</h2>
-                <div id="iterations-container"></div>
+                <h2>Procedimiento Analítico</h2>
+                <div id="steps-container"></div>
                 <div id="solution-output"></div>
 
                 <div id="chat-section" class="chat-container">
-                    <h3>¿Dudas con la convergencia o el resultado? Pregúntale a HamsterSolver 🐹</h3>
+                    <h3>¿Dudas con la integración o el resultado? Pregúntale a HamsterSolver 🐹</h3>
                     <div id="chat-history" class="chat-history"></div>
                     <div class="chat-input-group">
-                        <input type="text" id="chat-input" placeholder="Ej. ¿Qué es la matriz diagonalmente dominante?">
+                        <input type="text" id="chat-input" placeholder="Ej. ¿Por qué la derivada cruzada da 2x?">
                         <button id="btn-send-chat" class="btn-primary">Preguntar</button>
                     </div>
                 </div>
