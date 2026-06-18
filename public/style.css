@@ -1,14 +1,13 @@
 :root {
-    --bg-color: #0B0C10; 
-    --card-bg: linear-gradient(145deg, #15161a, #0b0c0f);
-    --text-main: #FFFFFF;
-    --text-muted: #66FCF1; /* Un cian muy pálido de apoyo */
-    --primary: #FF4500; /* Naranja Racing */
-    --primary-hover: #FF6326;
-    --border: rgba(255, 69, 0, 0.15);
+    --bg-color: #101114; /* Gris carbón mate industrial */
+    --card-bg: linear-gradient(145deg, #18191d, #101113);
+    --text-main: #FFFFFF; /* Blanco puro para contraste máximo */
+    --text-muted: #888888;
+    --primary: #F3E600; /* El icónico Amarillo Cyberpunk */
+    --primary-hover: #FFF100;
+    --border: rgba(243, 230, 0, 0.2); /* Borde amarillo muy sutil */
     --glass-glare: rgba(255, 255, 255, 0.02);
 }
-
 * {
     box-sizing: border-box;
     margin: 0;
