@@ -72,26 +72,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3 style="margin-bottom: 15px; color: var(--primary);">Paso 1: Criterio de Exactitud</h3>
                 <ul style="list-style-type: none; padding-left: 0; font-family: monospace; font-size: 0.95rem;">
                     <li style="margin-bottom: 8px; background: #0a0b0d; padding: 10px; border-radius: 6px; border: 1px solid #333;">
-                        <span style="color: var(--text-main);">∂M/∂y = </span> <span style="color: #4ceabf;">${data.dM_dy}</span>
+                        <span style="color: var(--text-main);">∂M/∂y = </span> <span style="color: var(--primary);">${data.dM_dy}</span>
                     </li>
                     <li style="margin-bottom: 8px; background: #0a0b0d; padding: 10px; border-radius: 6px; border: 1px solid #333;">
-                        <span style="color: var(--text-main);">∂N/∂x = </span> <span style="color: #4ceabf;">${data.dN_dx}</span>
+                        <span style="color: var(--text-main);">∂N/∂x = </span> <span style="color: var(--primary);">${data.dN_dx}</span>
                     </li>
                 </ul>
-                <p style="color: #4ceabf; margin-top: 15px; font-weight: 600;">✅ Coinciden. La ecuación es EXACTA.</p>
+                <p style="color: var(--primary); margin-top: 15px; font-weight: 600;">✅ Coinciden. La ecuación es EXACTA.</p>
             </div>`;
 
             stepsHtml += `<div class="result-box" style="margin-bottom: 25px;">
                 <h3 style="margin-bottom: 15px; color: var(--primary);">Paso 2 y 3: Integración y Despeje</h3>
                 <ul style="list-style-type: none; padding-left: 0; font-family: monospace; font-size: 1rem;">
                     <li style="margin-bottom: 8px; background: #0a0b0d; padding: 12px; border-radius: 6px; border: 1px solid #333;">
-                        1. Integrando M: f(x,y) = <strong style="color: var(--primary);">${data.f_partial} + g(y)</strong>
+                        1. Integrando M: f(x,y) = <strong style="color: white;">${data.f_partial} + g(y)</strong>
                     </li>
                     <li style="margin-bottom: 8px; background: #0a0b0d; padding: 12px; border-radius: 6px; border: 1px solid #333;">
-                        2. Igualando y despejando g'(y): g'(y) = <strong style="color: var(--primary);">${data.g_prime}</strong>
+                        2. Igualando y despejando g'(y): g'(y) = <strong style="color: white;">${data.g_prime}</strong>
                     </li>
                     <li style="margin-bottom: 8px; background: #0a0b0d; padding: 12px; border-radius: 6px; border: 1px solid #333;">
-                        3. Integrando g'(y): g(y) = <strong style="color: var(--primary);">${data.g_y}</strong>
+                        3. Integrando g'(y): g(y) = <strong style="color: white;">${data.g_y}</strong>
                     </li>
                 </ul>
             </div>`;
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             stepsContainer.innerHTML = stepsHtml;
             
             // Solución Final
-            solutionOutput.innerHTML = `<div class="result-box" style="border-left: 4px solid #ff007f;">
+            solutionOutput.innerHTML = `<div class="result-box" style="border-left: 4px solid var(--primary);">
                 <p><strong>Solución General Final:</strong></p>
                 <div style="background: #0a0b0d; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #333;">
                     <strong style="color: var(--primary); font-size: 1.5rem;">${data.solucion}</strong>
@@ -122,7 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
             chatHistory.innerHTML = '<div class="chat-msg msg-bot">¡Ecuación procesada por el servidor! ¿Tienes dudas sobre el resultado o el proceso? 🐹</div>';
 
         } catch (error) {
-            // Esto te mostrará el error real en pantalla en lugar de un mensaje genérico
             alert(`⛔ Fallo en la conexión o cálculo:\n\n${error.message}\n\nRevisa la pestaña "Logs" en tu panel de Vercel para ver el detalle del backend.`);
             console.error("Error detallado:", error);
         } finally {
@@ -131,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 6. Lógica del Chat de IA
+    // 6. Lógica del Chat de IA con captura de errores detallada
     async function sendMessage() {
         const text = chatInput.value.trim();
         if(!text) return;
@@ -142,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chatMessages.push({ role: "user", content: text });
 
         const loadingId = "loading-" + Date.now();
-        chatHistory.innerHTML += `<div id="${loadingId}" class="chat-msg msg-bot">Analizando ecuaciones... 🐹💭</div>`;
+        chatHistory.innerHTML += `<div id="${loadingId}" class="chat-msg msg-bot">Analizando dudas... 🐹💭</div>`;
         chatHistory.scrollTop = chatHistory.scrollHeight;
 
         try {
@@ -151,6 +150,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ messages: chatMessages })
             });
+            
+            if (!response.ok) {
+                const textError = await response.text();
+                throw new Error(`HTTP ${response.status}: ${textError}`);
+            }
+            
             const data = await response.json();
             document.getElementById(loadingId).remove();
 
@@ -158,9 +163,13 @@ document.addEventListener('DOMContentLoaded', () => {
             chatHistory.innerHTML += `<div class="chat-msg msg-bot">${botReply}</div>`;
             chatHistory.scrollTop = chatHistory.scrollHeight;
             chatMessages.push({ role: "assistant", content: botReply });
+            
         } catch(err) {
+            // Aquí atrapamos el error real y lo mostramos en pantalla
             document.getElementById(loadingId).remove();
-            chatHistory.innerHTML += `<div class="chat-msg msg-bot" style="color: red;">Error al conectar con la API Serverless.</div>`;
+            console.error("Error detallado del chat:", err);
+            chatHistory.innerHTML += `<div class="chat-msg msg-bot" style="color: #ff4d4d; border-color: #ff4d4d;">⛔ Error al conectar con Gemini: ${err.message}. Verifica tu backend (api/chat).</div>`;
+            chatHistory.scrollTop = chatHistory.scrollHeight;
         }
     }
 
