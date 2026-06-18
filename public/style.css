@@ -1,13 +1,16 @@
 :root {
-    --bg-color: #101114; /* Gris carbón mate industrial */
-    --card-bg: linear-gradient(145deg, #18191d, #101113);
-    --text-main: #FFFFFF; /* Blanco puro para contraste máximo */
-    --text-muted: #888888;
-    --primary: #F3E600; /* El icónico Amarillo Cyberpunk */
-    --primary-hover: #FFF100;
-    --border: rgba(243, 230, 0, 0.2); /* Borde amarillo muy sutil */
-    --glass-glare: rgba(255, 255, 255, 0.02);
+    --bg-color: #050406; /* Negro del espacio / fondo de pantallas NERV */
+    --card-bg: linear-gradient(145deg, #130a1c, #09050d); /* Morado ultra oscuro */
+    --text-main: #FFFFFF;
+    --text-muted: #8b7a9c;
+    --primary: #5eff00; /* Verde Neón EVA-01 */
+    --primary-hover: #7bff33;
+    --eva-purple: #6a1a9e; /* Morado brillante de la armadura */
+    --eva-orange: #ff5e00; /* Naranja MAGI / Alerta */
+    --border: rgba(106, 26, 158, 0.4); /* Bordes morados */
+    --glass-glare: rgba(94, 255, 0, 0.05); /* Brillo verde sutil */
 }
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -17,7 +20,8 @@
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-color);
-    background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+    /* Retícula táctica NERV muy sutil en morado */
+    background-image: radial-gradient(rgba(106, 26, 158, 0.2) 1px, transparent 1px);
     background-size: 20px 20px;
     color: var(--text-main);
     line-height: 1.6;
@@ -47,11 +51,12 @@ header {
 .app-logo {
     width: 90px;
     height: 90px;
-    border-radius: 50%;
+    border-radius: 0; /* Geometría estricta */
     object-fit: cover;
-    box-shadow: 0 0 20px rgba(0, 210, 255, 0.4), inset 0 0 10px rgba(0,0,0,0.8);
-    border: 3px solid #2a2e35;
+    box-shadow: 0 0 20px rgba(94, 255, 0, 0.4), inset 0 0 10px rgba(106, 26, 158, 0.8);
+    border: 2px solid var(--primary);
     background-color: #000;
+    clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%);
 }
 
 header h1 {
@@ -63,30 +68,36 @@ header h1 {
 }
 
 header p {
-    color: var(--text-muted);
+    color: var(--primary); /* Subtítulo en verde táctico */
     font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
-/* --- Tarjetas de Vidrio/Metal --- */
+/* --- Tarjetas Estilo "Mecha" --- */
 .card {
     background: var(--card-bg);
-    border-radius: 16px;
+    border-radius: 0px; /* Cero curvas */
     padding: 30px;
     margin-bottom: 24px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 0 var(--glass-glare);
-    border: 1px solid var(--border);
+    border: 1px solid var(--eva-purple);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(106, 26, 158, 0.2);
+    /* EL TRUCO MAGI: Corta la esquina inferior derecha */
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
 }
 
 .card h2 {
     font-size: 1.3rem;
     margin-bottom: 25px;
     font-weight: 600;
-    color: white;
-    border-bottom: 1px solid var(--border);
+    color: var(--eva-orange); /* Títulos en naranja de alerta */
+    border-bottom: 1px solid var(--eva-purple);
     padding-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-/* --- Controles (Inputs tipo display LED) --- */
+/* --- Controles (Inputs tipo Terminal NERV) --- */
 .input-group {
     display: flex;
     gap: 20px;
@@ -105,26 +116,27 @@ label {
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--text-muted);
+    text-transform: uppercase;
 }
 
 input[type="number"], input[type="text"] {
     width: 100%;
     padding: 12px;
-    background-color: #0a0b0d;
-    color: var(--primary);
-    border: 1px solid #222;
-    border-radius: 8px;
+    background-color: #000; /* Fondo negro profundo */
+    color: var(--primary); /* Texto verde EVA */
+    border: 1px solid var(--eva-purple);
+    border-radius: 0px;
     font-family: 'Inter', monospace;
     font-size: 1.1rem;
     font-weight: 600;
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.6);
-    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
+    transition: all 0.2s ease;
 }
 
 input[type="number"]:focus, input[type="text"]:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.6), 0 0 12px rgba(0, 210, 255, 0.3);
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.8), 0 0 12px rgba(94, 255, 0, 0.2);
 }
 
 .input-small {
@@ -133,43 +145,85 @@ input[type="number"]:focus, input[type="text"]:focus {
     text-align: center;
 }
 
-/* --- Botones (Efecto Gelatina / Liquid Glass) --- */
+select.glass-select {
+    width: 100%;
+    padding: 12px;
+    background-color: #000;
+    color: var(--primary);
+    border: 1px solid var(--eva-purple);
+    border-radius: 0px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    appearance: none; 
+    /* Flecha verde en SVG para el selector */
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%235eff00%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px top 50%;
+    background-size: 12px auto;
+}
+
+select.glass-select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 12px rgba(94, 255, 0, 0.2);
+}
+
+select.glass-select option {
+    background-color: #050406;
+    color: var(--primary);
+}
+
+/* --- Botón de Sincronización --- */
 .btn-primary {
-    background: linear-gradient(180deg, #3cd3ad 0%, #0072ff 100%);
-    color: white;
-    border: 1px solid #0056b3;
+    background: rgba(106, 26, 158, 0.2);
+    color: var(--primary) !important;
+    border: 1px solid var(--primary);
     padding: 14px 24px;
-    border-radius: 12px;
+    border-radius: 0px;
     font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
     width: 100%;
-    text-shadow: 0px -1px 2px rgba(0,0,0,0.4);
-    box-shadow: inset 0px 2px 2px rgba(255,255,255,0.4), 0px 6px 15px rgba(0, 114, 255, 0.3);
-    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    box-shadow: inset 0 0 10px rgba(94, 255, 0, 0.1);
+    transition: all 0.15s ease-in-out;
 }
 
 .btn-primary:hover {
-    background: linear-gradient(180deg, #4ceabf 0%, #0084ff 100%);
-    box-shadow: inset 0px 2px 2px rgba(255,255,255,0.5), 0px 8px 20px rgba(0, 114, 255, 0.5);
-    transform: translateY(-2px);
+    background: var(--primary);
+    color: #000000 !important;
+    box-shadow: 0 0 20px rgba(94, 255, 0, 0.6);
+    transform: scale(1.02);
 }
 
 .btn-primary:active {
-    transform: translateY(1px);
-    box-shadow: inset 0px 4px 8px rgba(0,0,0,0.4);
+    transform: scale(0.98);
+    background: var(--eva-orange);
+    border-color: var(--eva-orange);
 }
 
 .hidden { display: none; }
 
-/* --- Cajas de Resultados y Despejes --- */
+/* --- Cajas de Resultados Sistema MAGI --- */
 .result-box {
-    background-color: #161a22;
+    background-color: rgba(0, 0, 0, 0.5);
     padding: 18px;
-    border-radius: 10px;
+    border-radius: 0px;
     margin-top: 15px;
-    border-left: 4px solid var(--primary);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    border-left: 4px solid var(--eva-orange);
+    border-right: 1px solid var(--border);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.result-box h3 {
+    color: var(--eva-orange) !important;
+    text-transform: uppercase;
 }
 
 .result-box p {
@@ -179,66 +233,108 @@ input[type="number"]:focus, input[type="text"]:focus {
 }
 
 .result-box li {
-    background: #0a0b0d !important;
+    background: #000 !important;
     color: var(--primary) !important;
-    border: 1px solid #333 !important;
+    border: 1px solid var(--eva-purple) !important;
     margin-bottom: 8px;
     padding: 8px 12px;
-    border-radius: 6px;
+    border-radius: 0px;
     font-family: monospace;
 }
 
-/* --- Chat de IA (Cristalino y Metálico) --- */
+/* --- Entrada de Ecuaciones Diferenciales --- */
+.equation-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+    background: #09050d;
+    padding: 25px 20px;
+    border-radius: 0;
+    border: 1px solid var(--eva-purple);
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.8);
+}
+
+.math-symbol {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--eva-orange); /* Símbolos en naranja */
+    font-family: 'Inter', monospace;
+    padding-top: 25px;
+}
+
+.eq-term {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.eq-term label {
+    color: var(--primary);
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+.eq-term input {
+    text-align: center;
+    width: 220px;
+    font-size: 1.2rem;
+    padding: 15px;
+}
+
+/* --- Chat de IA NERV --- */
 .chat-container {
     margin-top: 30px;
-    border-top: 2px dashed #333;
+    border-top: 2px dashed var(--eva-purple);
     padding-top: 25px;
 }
 
 .chat-container h3 {
     font-size: 1.1rem;
     margin-bottom: 15px;
-    color: white;
+    color: var(--eva-orange);
     font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .chat-history {
     max-height: 300px;
     overflow-y: auto;
-    background-color: #0a0b0d;
-    border-radius: 12px;
+    background-color: #050406;
+    border-radius: 0;
     padding: 15px;
     margin-bottom: 15px;
-    border: 1px solid #333;
+    border: 1px solid var(--eva-purple);
     display: flex;
     flex-direction: column;
     gap: 12px;
-    box-shadow: inset 0 5px 15px rgba(0,0,0,0.7);
 }
 
 .chat-msg {
     padding: 12px 16px;
-    border-radius: 16px;
+    border-radius: 0;
     max-width: 85%;
     font-size: 0.95rem;
     line-height: 1.5;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .msg-user {
-    background: linear-gradient(135deg, #0072ff, #00c6ff);
+    background: var(--eva-purple);
     color: white;
     align-self: flex-end;
-    border-bottom-right-radius: 4px;
-    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+    border-left: 3px solid var(--primary);
 }
 
 .msg-bot {
-    background: linear-gradient(135deg, #2a2d34, #1e2126);
-    color: #e0e0e0;
+    background: #111;
+    color: var(--primary);
     align-self: flex-start;
-    border-bottom-left-radius: 4px;
-    border: 1px solid #3a3f4a;
+    border: 1px solid var(--eva-orange);
 }
 
 .chat-input-group {
@@ -256,12 +352,7 @@ input[type="number"]:focus, input[type="text"]:focus {
     padding: 10px 24px;
 }
 
-@media (max-width: 600px) {
-    header h1 { font-size: 2.2rem; }
-    .card { padding: 20px; }
-    .header-content { flex-direction: column; gap: 10px; }
-}
-
+/* Logos y responsividad */
 .sitio-logo-link {
   display: inline-block;
   text-decoration: none;
@@ -272,88 +363,15 @@ input[type="number"]:focus, input[type="text"]:focus {
   height: auto;
   display: block;
   margin-right: 20px;
+  /* Efecto de holograma sobre el logo blanco/negro */
+  filter: drop-shadow(0px 0px 8px var(--primary)); 
 }
 
 @media (max-width: 600px) {
-  .sitio-logo { max-width: 300px; }
-}
-
-select.glass-select {
-    width: 100%;
-    padding: 12px;
-    background-color: #0a0b0d;
-    color: var(--primary);
-    border: 1px solid #222;
-    border-radius: 8px;
-    font-family: 'Inter', sans-serif;
-    font-size: 1.05rem;
-    font-weight: 600;
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.6);
-    transition: all 0.3s ease;
-    cursor: pointer;
-    appearance: none; 
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2300d2ff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-    background-repeat: no-repeat;
-    background-position: right 15px top 50%;
-    background-size: 12px auto;
-}
-
-select.glass-select:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.6), 0 0 12px rgba(0, 210, 255, 0.3);
-}
-
-select.glass-select option {
-    background-color: #121417;
-    color: #fff;
-}
-
-/* --- Estilos Nuevos para Entrada de Ecuaciones Diferenciales --- */
-.equation-input-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 30px;
-    background: #0a0b0d;
-    padding: 25px 20px;
-    border-radius: 12px;
-    border: 1px solid #222;
-    box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
-}
-
-.math-symbol {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--primary);
-    font-family: 'Inter', monospace;
-    padding-top: 25px;
-}
-
-.eq-term {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.eq-term label {
-    color: var(--primary);
-    font-size: 1.1rem;
-    margin-bottom: 10px;
-    letter-spacing: 1px;
-}
-
-.eq-term input {
-    text-align: center;
-    width: 220px;
-    font-size: 1.2rem;
-    padding: 15px;
-    background-color: #121417;
-}
-
-@media (max-width: 600px) {
+    header h1 { font-size: 2.2rem; }
+    .card { padding: 20px; }
+    .header-content { flex-direction: column; gap: 10px; }
+    .sitio-logo { max-width: 300px; }
     .equation-input-wrapper {
         flex-direction: column;
         gap: 5px;
