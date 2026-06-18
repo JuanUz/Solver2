@@ -1,14 +1,12 @@
 :root {
-    --bg-color: #050406; /* Negro del espacio / fondo de pantallas NERV */
-    --card-bg: linear-gradient(145deg, #130a1c, #09050d); /* Morado ultra oscuro */
-    --text-main: #FFFFFF;
-    --text-muted: #8b7a9c;
-    --primary: #5eff00; /* Verde Neón EVA-01 */
-    --primary-hover: #7bff33;
-    --eva-purple: #6a1a9e; /* Morado brillante de la armadura */
-    --eva-orange: #ff5e00; /* Naranja MAGI / Alerta */
-    --border: rgba(106, 26, 158, 0.4); /* Bordes morados */
-    --glass-glare: rgba(94, 255, 0, 0.05); /* Brillo verde sutil */
+    --bg-color: #121417; /* Gris metálico casi negro */
+    --card-bg: linear-gradient(145deg, #1e2126, #16181b);
+    --text-main: #FFFFFF; /* Texto principal forzado a BLANCO PURO */
+    --text-muted: #DDDDDD; /* Texto silenciado muy claro, casi blanco */
+    --primary: #9D33FF; /* Morado Neón vibrante (Estilo EVA-01) */
+    --primary-hover: #BF66FF; /* Morado más claro para hovers */
+    --border: rgba(255, 255, 255, 0.08);
+    --glass-glare: rgba(255, 255, 255, 0.05);
 }
 
 * {
@@ -20,8 +18,8 @@
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-color);
-    /* Retícula táctica NERV muy sutil en morado */
-    background-image: radial-gradient(rgba(106, 26, 158, 0.2) 1px, transparent 1px);
+    /* Patrón de cuadrícula muy sutil de fondo */
+    background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
     background-size: 20px 20px;
     color: var(--text-main);
     line-height: 1.6;
@@ -51,12 +49,13 @@ header {
 .app-logo {
     width: 90px;
     height: 90px;
-    border-radius: 0; /* Geometría estricta */
+    border-radius: 50%;
     object-fit: cover;
-    box-shadow: 0 0 20px rgba(94, 255, 0, 0.4), inset 0 0 10px rgba(106, 26, 158, 0.8);
-    border: 2px solid var(--primary);
+    /* Efecto de emblema empotrado con luz morada que irradia */
+    box-shadow: 0 0 20px rgba(157, 51, 255, 0.4), 
+                inset 0 0 10px rgba(0,0,0,0.8);
+    border: 3px solid #2a2e35;
     background-color: #000;
-    clip-path: polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%);
 }
 
 header h1 {
@@ -68,36 +67,32 @@ header h1 {
 }
 
 header p {
-    color: var(--primary); /* Subtítulo en verde táctico */
+    color: var(--text-muted);
     font-size: 1.1rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
 }
 
-/* --- Tarjetas Estilo "Mecha" --- */
+/* --- Tarjetas de Vidrio/Metal --- */
 .card {
     background: var(--card-bg);
-    border-radius: 0px; /* Cero curvas */
+    border-radius: 16px;
     padding: 30px;
     margin-bottom: 24px;
-    border: 1px solid var(--eva-purple);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(106, 26, 158, 0.2);
-    /* EL TRUCO MAGI: Corta la esquina inferior derecha */
-    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+    /* Sombra profunda y bisel superior para efecto 3D */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 
+                inset 0 1px 0 var(--glass-glare);
+    border: 1px solid var(--border);
 }
 
 .card h2 {
     font-size: 1.3rem;
     margin-bottom: 25px;
     font-weight: 600;
-    color: var(--eva-orange); /* Títulos en naranja de alerta */
-    border-bottom: 1px solid var(--eva-purple);
+    color: white;
+    border-bottom: 1px solid var(--border);
     padding-bottom: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
 }
 
-/* --- Controles (Inputs tipo Terminal NERV) --- */
+/* --- Controles Estándar --- */
 .input-group {
     display: flex;
     gap: 20px;
@@ -115,28 +110,30 @@ label {
     margin-bottom: 8px;
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
+    color: var(--text-main); /* Etiquetas blancas */
 }
 
 input[type="number"], input[type="text"] {
     width: 100%;
     padding: 12px;
-    background-color: #000; /* Fondo negro profundo */
-    color: var(--primary); /* Texto verde EVA */
-    border: 1px solid var(--eva-purple);
-    border-radius: 0px;
+    /* Fondo oscuro empotrado tipo pantalla */
+    background-color: #0a0b0d;
+    color: var(--primary); /* Texto morado "LED" */
+    border: 1px solid #222;
+    border-radius: 8px;
     font-family: 'Inter', monospace;
     font-size: 1.1rem;
     font-weight: 600;
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
-    transition: all 0.2s ease;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.6);
+    transition: all 0.3s ease;
 }
 
 input[type="number"]:focus, input[type="text"]:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.8), 0 0 12px rgba(94, 255, 0, 0.2);
+    /* Brillo morado al seleccionar */
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.6), 
+                0 0 12px rgba(157, 51, 255, 0.3);
 }
 
 .input-small {
@@ -145,104 +142,73 @@ input[type="number"]:focus, input[type="text"]:focus {
     text-align: center;
 }
 
-select.glass-select {
-    width: 100%;
-    padding: 12px;
-    background-color: #000;
-    color: var(--primary);
-    border: 1px solid var(--eva-purple);
-    border-radius: 0px;
-    font-family: 'Inter', sans-serif;
-    font-size: 1.05rem;
-    font-weight: 600;
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
-    transition: all 0.2s ease;
-    cursor: pointer;
-    appearance: none; 
-    /* Flecha verde en SVG para el selector */
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%235eff00%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-    background-repeat: no-repeat;
-    background-position: right 15px top 50%;
-    background-size: 12px auto;
-}
-
-select.glass-select:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 12px rgba(94, 255, 0, 0.2);
-}
-
-select.glass-select option {
-    background-color: #050406;
-    color: var(--primary);
-}
-
-/* --- Botón de Sincronización --- */
+/* --- Botones (Degradado Morado Neón) --- */
 .btn-primary {
-    background: rgba(106, 26, 158, 0.2);
-    color: var(--primary) !important;
-    border: 1px solid var(--primary);
+    /* Degradado de Magenta a Morado Neón Eva-01 */
+    background: linear-gradient(180deg, #FF33FF 0%, #9D33FF 100%);
+    color: white;
+    border: 1px solid #7F00FF;
     padding: 14px 24px;
-    border-radius: 0px;
+    border-radius: 12px;
     font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
     width: 100%;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    box-shadow: inset 0 0 10px rgba(94, 255, 0, 0.1);
-    transition: all 0.15s ease-in-out;
+    text-shadow: 0px -1px 2px rgba(0,0,0,0.4);
+    /* Sombra morada */
+    box-shadow: inset 0px 2px 2px rgba(255,255,255,0.4), 
+                0px 6px 15px rgba(157, 51, 255, 0.3);
+    transition: all 0.2s ease;
 }
 
 .btn-primary:hover {
-    background: var(--primary);
-    color: #000000 !important;
-    box-shadow: 0 0 20px rgba(94, 255, 0, 0.6);
-    transform: scale(1.02);
-}
-
-.btn-primary:active {
-    transform: scale(0.98);
-    background: var(--eva-orange);
-    border-color: var(--eva-orange);
+    background: linear-gradient(180deg, #FF66FF 0%, #BF66FF 100%);
+    box-shadow: inset 0px 2px 2px rgba(255,255,255,0.5), 
+                0px 8px 20px rgba(157, 51, 255, 0.5);
+    transform: translateY(-2px);
 }
 
 .hidden { display: none; }
 
-/* --- Cajas de Resultados Sistema MAGI --- */
+/* --- Cajas de Resultados y Despejes --- */
 .result-box {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: #161a22;
     padding: 18px;
-    border-radius: 0px;
+    border-radius: 10px;
     margin-top: 15px;
-    border-left: 4px solid var(--eva-orange);
-    border-right: 1px solid var(--border);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
+    border-left: 4px solid var(--primary); /* Borde morado */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
 
 .result-box h3 {
-    color: var(--eva-orange) !important;
-    text-transform: uppercase;
+    margin-bottom: 15px;
+    color: var(--primary); /* Títulos de pasos morados */
+    font-size: 1.2rem;
+    font-weight: 600;
 }
 
 .result-box p {
     font-size: 1.1rem;
     margin-bottom: 10px;
-    color: white;
+    color: white; /* Texto de descripción blanco */
 }
 
 .result-box li {
-    background: #000 !important;
-    color: var(--primary) !important;
-    border: 1px solid var(--eva-purple) !important;
+    background: #0a0b0d !important;
+    color: var(--primary) !important; /* Ecuaciones moradas */
+    border: 1px solid #333 !important;
     margin-bottom: 8px;
     padding: 8px 12px;
-    border-radius: 0px;
+    border-radius: 6px;
     font-family: monospace;
 }
 
-/* --- Entrada de Ecuaciones Diferenciales --- */
+/* Forzar que los valores numéricos resaltados en los resultados sean blancos */
+.result-box li strong {
+    color: white !important;
+}
+
+/* --- Apartado de Ecuaciones (Inputs de M dx + N dy = 0) --- */
 .equation-input-wrapper {
     display: flex;
     align-items: center;
@@ -250,19 +216,13 @@ select.glass-select option {
     justify-content: center;
     flex-wrap: wrap;
     margin-bottom: 30px;
-    background: #09050d;
-    padding: 25px 20px;
-    border-radius: 0;
-    border: 1px solid var(--eva-purple);
-    box-shadow: inset 0 2px 10px rgba(0,0,0,0.8);
 }
 
 .math-symbol {
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--eva-orange); /* Símbolos en naranja */
-    font-family: 'Inter', monospace;
-    padding-top: 25px;
+    color: white; /* dx, +, dy, = 0 forzados a BLANCO */
+    font-family: monospace;
 }
 
 .eq-term {
@@ -271,70 +231,66 @@ select.glass-select option {
     align-items: center;
 }
 
+/* Asegurar que las etiquetas M(x,y) sean blancas */
 .eq-term label {
-    color: var(--primary);
-    font-size: 1.1rem;
-    margin-bottom: 10px;
-    letter-spacing: 2px;
-    font-weight: bold;
+    color: white !important;
 }
 
 .eq-term input {
+    width: 150px;
     text-align: center;
-    width: 220px;
-    font-size: 1.2rem;
-    padding: 15px;
 }
 
-/* --- Chat de IA NERV --- */
+/* --- Chat de IA (Burbuja morada) --- */
 .chat-container {
     margin-top: 30px;
-    border-top: 2px dashed var(--eva-purple);
+    border-top: 2px dashed #333;
     padding-top: 25px;
 }
 
 .chat-container h3 {
     font-size: 1.1rem;
     margin-bottom: 15px;
-    color: var(--eva-orange);
+    color: white;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
 }
 
 .chat-history {
     max-height: 300px;
     overflow-y: auto;
-    background-color: #050406;
-    border-radius: 0;
+    background-color: #0a0b0d;
+    border-radius: 12px;
     padding: 15px;
     margin-bottom: 15px;
-    border: 1px solid var(--eva-purple);
+    border: 1px solid #333;
     display: flex;
     flex-direction: column;
     gap: 12px;
+    box-shadow: inset 0 5px 15px rgba(0,0,0,0.7);
 }
 
 .chat-msg {
     padding: 12px 16px;
-    border-radius: 0;
+    border-radius: 16px;
     max-width: 85%;
     font-size: 0.95rem;
     line-height: 1.5;
 }
 
 .msg-user {
-    background: var(--eva-purple);
+    /* Burbuja del usuario: Morado neón */
+    background: var(--primary);
     color: white;
     align-self: flex-end;
-    border-left: 3px solid var(--primary);
+    border-bottom-right-radius: 4px;
 }
 
 .msg-bot {
-    background: #111;
-    color: var(--primary);
+    background: #16181b;
+    color: #e0e0e0;
     align-self: flex-start;
-    border: 1px solid var(--eva-orange);
+    border-bottom-left-radius: 4px;
+    border: 1px solid #3a3f4a;
 }
 
 .chat-input-group {
@@ -347,12 +303,7 @@ select.glass-select option {
     margin-bottom: 0;
 }
 
-.chat-input-group button {
-    width: auto;
-    padding: 10px 24px;
-}
-
-/* Logos y responsividad */
+/* --- Logos y Responsividad --- */
 .sitio-logo-link {
   display: inline-block;
   text-decoration: none;
@@ -363,8 +314,15 @@ select.glass-select option {
   height: auto;
   display: block;
   margin-right: 20px;
-  /* Efecto de holograma sobre el logo blanco/negro */
-  filter: drop-shadow(0px 0px 8px var(--primary)); 
+}
+
+/* Fix para el color de la flecha del selector */
+select.glass-select {
+    appearance: none; 
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239D33FF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px top 50%;
+    background-size: 12px auto;
 }
 
 @media (max-width: 600px) {
