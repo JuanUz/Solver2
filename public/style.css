@@ -1,12 +1,12 @@
 :root {
-    --bg-color: #121417; /* Gris metálico casi negro */
-    --card-bg: linear-gradient(145deg, #1e2126, #16181b);
-    --text-main: #f0f0f0;
-    --text-muted: #8e95a0;
-    --primary: #00d2ff; /* Azul eléctrico / Neón */
-    --primary-hover: #3a7bd5;
-    --border: rgba(255, 255, 255, 0.08);
-    --glass-glare: rgba(255, 255, 255, 0.05);
+    --bg-color: #1C1C1E; 
+    --card-bg: linear-gradient(145deg, #242426, #1a1a1c);
+    --text-main: #F5F5F7;
+    --text-muted: #8E8E93;
+    --primary: #D4C9B3; /* Crema vintage / Hueso */
+    --primary-hover: #EBE1CD;
+    --border: rgba(255, 255, 255, 0.05);
+    --glass-glare: rgba(255, 255, 255, 0.03);
 }
 
 * {
