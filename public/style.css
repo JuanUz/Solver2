@@ -1,12 +1,12 @@
 :root {
-    --bg-color: #1C1C1E; 
-    --card-bg: linear-gradient(145deg, #242426, #1a1a1c);
-    --text-main: #F5F5F7;
-    --text-muted: #8E8E93;
-    --primary: #D4C9B3; /* Crema vintage / Hueso */
-    --primary-hover: #EBE1CD;
-    --border: rgba(255, 255, 255, 0.05);
-    --glass-glare: rgba(255, 255, 255, 0.03);
+    --bg-color: #0B0C10; 
+    --card-bg: linear-gradient(145deg, #15161a, #0b0c0f);
+    --text-main: #FFFFFF;
+    --text-muted: #66FCF1; /* Un cian muy pálido de apoyo */
+    --primary: #FF4500; /* Naranja Racing */
+    --primary-hover: #FF6326;
+    --border: rgba(255, 69, 0, 0.15);
+    --glass-glare: rgba(255, 255, 255, 0.02);
 }
 
 * {
